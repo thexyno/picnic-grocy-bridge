@@ -2,6 +2,8 @@ import { Command } from "commander";
 import { PGBConfig } from "./pgbconfig";
 import PicnicClient, { CountryCodes, ImageSizes, HttpMethods } from "picnic-api";
 import {exit} from "process";
+import {GrocyConnector} from "./grocy-connecor";
+import {PicnicEan} from "./picnic-ean";
 
 
 const program = new Command('Grocy Picnic');
@@ -29,17 +31,17 @@ program
 program
   .command('import-last-order')
   .description('import the last order')
-  .action(importLastOrder);
+  .action(importLastDelivery);
 
 program
   .command('import-order <order-id>')
   .description('import the order with given id')
-  .action(importOrder);
+  .action(importDelivery);
 
 program
-  .command('barcode-connect')
-  .description('connect created grocy products with barcodes')
-  .action(barcodeConnect);
+  .command('scan')
+  .description('connect picnic products with barcodes')
+  .action(scan);
 
 const config = new PGBConfig('./data.json');
 
@@ -57,15 +59,23 @@ async function login(): Promise<any> { // PicnicClient
   }
   const email = opts.email;
   const password = opts.password;
-  const country = opts.country;
-  const url = country == "DE" ? "https://storefront-prod.de.picnicinternational.com/api/17" : "https://storefront-prod.nl.picnicinternational.com/api/17"
-  if (authKey) {
+  let country = opts.country;
+  if(!country) {
+    country = config.data.country;
+  } else {
+    config.patch({ country: country });
+  }
+  if(!country) {
+    console.log("Please set a country");
+    exit(3);
+  }
+
+    if (authKey) {
     debug(`auth key: ${authKey}`);
     const client = new PicnicClient({
       countryCode: country === "DE" ? CountryCodes.DE : CountryCodes.NL,
       apiVersion: 17,
       authKey: authKey,
-      url: url,
     });
     try {
       debug(JSON.stringify(await client.getUserDetails()));
@@ -75,39 +85,68 @@ async function login(): Promise<any> { // PicnicClient
       console.log('Trying to get a new auth key');
     }
   }
-  return await loginEmailPassword(email, password, country, url);
+  return await loginEmailPassword(email, password, country);
 }
 
-async function loginEmailPassword(email: string, password: string, country: string, url: string): Promise<any>  { // PicnicClient
+async function loginEmailPassword(email: string, password: string, country: string): Promise<any>  { // PicnicClient
   try {
+  debug('logging in with username and password');
   const client = new PicnicClient({
     countryCode: country === "DE" ? CountryCodes.DE : CountryCodes.NL,
     apiVersion: 17,
-    url: url,
   });
+  try {
   await client.login(email, password);
+  } catch(e) {
+    console.error(e);
+    exit(8);
+  }
   config.patch({ authKey: client.authKey });
   debug(JSON.stringify(await client.getUserDetails()));
+  return client;
   } catch(e) {
     console.log(e);
     exit(1);
   }
 }
 
-function importBasket() {
-  throw new Error("Function not implemented.");
+async function importBasket() {
+  const opts = program.opts();
+  let picnic = await login();
+  let data = await picnic.getShoppingCart();
+  const grocyConn = new GrocyConnector(opts.apiKey, opts.grocyUrl, config);
+  const picnicEan = new PicnicEan(config, grocyConn);
+  picnicEan.addProducts(data.items);
 }
 
-function importLastOrder() {
-  throw new Error("Function not implemented.");
+async function importLastDelivery() {
+  const picnic = await login();
+  const deliveries = await picnic.getDeliveries(true)
+  await importDelivery(deliveries[0].delivery_id);
 }
 
-function importOrder(orderId: string) {
-  throw new Error("Function not implemented.");
+async function importDelivery(deliveryId: string) {
+  const opts = program.opts();
+  const picnic = await login();
+  const grocyConn = new GrocyConnector(opts.apiKey, opts.grocyUrl, config);
+  const picnicEan = new PicnicEan(config, grocyConn);
+  const delivery = await picnic.getDelivery(deliveryId)
+  console.log(delivery);
+  const prods = [].concat(...delivery.orders.map((order: any) => order.items));
+  picnicEan.addProducts(prods);
 }
 
-function barcodeConnect(barcodeConnect: any) {
-  throw new Error("Function not implemented.");
+async function scan() {
+  const opts = program.opts();
+  let country = opts.country;
+  if(!country) {
+    country = config.data.country;
+  } else {
+    config.patch({ country: country });
+  }
+  const grocyConn = new GrocyConnector(opts.apiKey, opts.grocyUrl, config);
+  const picnicEan = new PicnicEan(config, grocyConn);
+  picnicEan.scan();
 }
 
 program.parse(process.argv);

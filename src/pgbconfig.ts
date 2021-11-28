@@ -2,7 +2,11 @@ import * as fs from 'fs';
 
 export interface PGBridge {
   authKey?: string;
+  country?: string;
   grocyPicnicStoreId?: number;
+  grocyQuantityUnits?: { name?: string; name_plural?: string; description?: string; id?: number; }[];
+  picnicIdToEanLocation?: any;
+  unknownProducts?: { picnicId: string; name: string; count: number; }[];
 }
 
 export class PGBConfig {

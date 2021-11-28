@@ -734,35 +734,8 @@ export enum ExposedEntityIncludingUserEntities {
     StockCurrentLocations = 'stock_current_locations',
     ChoresLog = 'chores_log',
     MealPlanSections = 'meal_plan_sections',
-    ApiKeys = 'api_keys',
-    Batteries = 'batteries',
-    Chores = 'chores',
-    ChoresLog = 'chores_log',
-    Equipment = 'equipment',
-    Locations = 'locations',
-    MealPlan = 'meal_plan',
-    MealPlanSections = 'meal_plan_sections',
-    ProductBarcodes = 'product_barcodes',
-    ProductGroups = 'product_groups',
-    Products = 'products',
-    QuantityUnitConversions = 'quantity_unit_conversions',
-    QuantityUnits = 'quantity_units',
-    Recipes = 'recipes',
-    RecipesNestings = 'recipes_nestings',
-    RecipesPos = 'recipes_pos',
-    ShoppingList = 'shopping_list',
-    ShoppingLists = 'shopping_lists',
-    ShoppingLocations = 'shopping_locations',
-    Stock = 'stock',
-    StockCurrentLocations = 'stock_current_locations',
-    StockLog = 'stock_log',
-    TaskCategories = 'task_categories',
-    Tasks = 'tasks',
-    Userentities = 'userentities',
     UserentityExampleuserentity = 'userentity-exampleuserentity',
     UserentityNgluserentity = 'userentity-ngluserentity',
-    Userfields = 'userfields',
-    Userobjects = 'userobjects',
     Users = 'users'
 }
 
@@ -773,31 +746,9 @@ export enum ExposedEntityIncludingUserEntities {
  */
 
 export enum ExposedEntityIncludingUserEntitiesNotIncludingNotEditable {
+    Batteries = 'batteries',
+    Chores = 'chores',
     Empty = '',
-    Products = 'products',
-    Chores = 'chores',
-    ProductBarcodes = 'product_barcodes',
-    Batteries = 'batteries',
-    Locations = 'locations',
-    QuantityUnits = 'quantity_units',
-    QuantityUnitConversions = 'quantity_unit_conversions',
-    ShoppingList = 'shopping_list',
-    ShoppingLists = 'shopping_lists',
-    ShoppingLocations = 'shopping_locations',
-    Recipes = 'recipes',
-    RecipesPos = 'recipes_pos',
-    RecipesNestings = 'recipes_nestings',
-    Tasks = 'tasks',
-    TaskCategories = 'task_categories',
-    ProductGroups = 'product_groups',
-    Equipment = 'equipment',
-    Userfields = 'userfields',
-    Userentities = 'userentities',
-    Userobjects = 'userobjects',
-    MealPlan = 'meal_plan',
-    MealPlanSections = 'meal_plan_sections',
-    Batteries = 'batteries',
-    Chores = 'chores',
     Equipment = 'equipment',
     Locations = 'locations',
     MealPlan = 'meal_plan',
@@ -816,7 +767,6 @@ export enum ExposedEntityIncludingUserEntitiesNotIncludingNotEditable {
     TaskCategories = 'task_categories',
     Tasks = 'tasks',
     Userentities = 'userentities',
-    UserentityExampleuserentity = 'userentity-exampleuserentity',
     UserentityNgluserentity = 'userentity-ngluserentity',
     Userfields = 'userfields',
     Userobjects = 'userobjects',
@@ -5066,7 +5016,7 @@ export const GenericEntityInteractionsApiAxiosParamCreator = function (configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userfieldsEntityObjectIdPut: async (entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: , options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        userfieldsEntityObjectIdPut: async (entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'entity' is not null or undefined
             assertParamExists('userfieldsEntityObjectIdPut', 'entity', entity)
             // verify required parameter 'objectId' is not null or undefined
@@ -5199,7 +5149,7 @@ export const GenericEntityInteractionsApiFp = function(configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userfieldsEntityObjectIdPut(entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: , options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async userfieldsEntityObjectIdPut(entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userfieldsEntityObjectIdPut(entity, objectId, UNKNOWN_PARAM_NAME, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -5292,7 +5242,7 @@ export const GenericEntityInteractionsApiFactory = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userfieldsEntityObjectIdPut(entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: , options?: any): AxiosPromise<void> {
+        userfieldsEntityObjectIdPut(entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: any, options?: any): AxiosPromise<void> {
             return localVarFp.userfieldsEntityObjectIdPut(entity, objectId, UNKNOWN_PARAM_NAME, options).then((request) => request(axios, basePath));
         },
     };
@@ -5397,7 +5347,7 @@ export class GenericEntityInteractionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof GenericEntityInteractionsApi
      */
-    public userfieldsEntityObjectIdPut(entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: , options?: AxiosRequestConfig) {
+    public userfieldsEntityObjectIdPut(entity: ExposedEntityIncludingUserEntitiesNotIncludingNotEditable, objectId: number, UNKNOWN_PARAM_NAME: any, options?: AxiosRequestConfig) {
         return GenericEntityInteractionsApiFp(this.configuration).userfieldsEntityObjectIdPut(entity, objectId, UNKNOWN_PARAM_NAME, options).then((request) => request(this.axios, this.basePath));
     }
 }
